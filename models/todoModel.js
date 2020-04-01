@@ -9,6 +9,6 @@ var todoSchema = new Schema ({
     hasAttachment:Boolean
 });
 
-var Todos = mongoose.model('Todos', todoSchema);
+var Todos = mongoose.model('Todos', todoSchema); // todos will be the name of the collection
 
 module.exports = Todos;
