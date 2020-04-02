@@ -6,6 +6,15 @@ module.exports = function(app) { // just 1 entry point
     app.use(bodyParser.json()); // nous parserons le body en Json
     app.use(bodyParser.urlencoded({ extended:true})); // il faudra qu'on soit capable de lire l'URL
 
+    /**
+     * @swagger
+     * /todos
+     * get:
+     *      description : my first section,
+     *      responses :
+     *          '200':
+     *              description : a successfull response
+     */
     app.get('/api/home', function(req, res) {
         res.send('Home API Controller');
     });
@@ -58,5 +67,4 @@ module.exports = function(app) { // just 1 entry point
             });
         }
     });
-
 }
