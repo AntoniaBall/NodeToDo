@@ -8,9 +8,9 @@ module.exports = function(app) { // just 1 entry point
 
     /**
      * @swagger
-     * /todos :
+     * /todos:
      *  get:
-     *      description : my first topic
+     *      description : "my first topic"
      *      responses:
      *          '200':
      *              description : "successfull!"
@@ -19,6 +19,20 @@ module.exports = function(app) { // just 1 entry point
         res.send('Home API Controller');
     });
 
+    /**
+     * @swagger
+     * /api/todo/:uname:
+     *  get:
+     *      description : "find a todo by username"
+     *      parameters:
+     *         - username : username
+     *           description : username
+     *           required: true
+     *           type : string
+     *      responses:
+     *          '200':
+     *              description : "successfull!"
+     */
     app.get('/api/todo/:uname', function(req,res) {
 
         Todos.findOne({ username : req.params.uname},
@@ -29,6 +43,15 @@ module.exports = function(app) { // just 1 entry point
             });
     });
 
+    /**
+     * @swagger
+     * /api/todo:
+     *  post:
+     *      description : "Add a to do"
+     *      responses:
+     *          '200':
+     *              description : "successfull!"
+     */
     app.post('/api/todo', function(req, res) {
 
         if(req.body.id) {
@@ -55,7 +78,16 @@ module.exports = function(app) { // just 1 entry point
         }
     });
 
-    app.delete('/api/delete/:id', function(req, res) {
+    /**
+     * @swagger
+     * /api/todo/:id:
+     *  delete:
+     *      description : "delete todo by Id"
+     *      responses:
+     *          '200':
+     *              description : "successfull!"
+     */
+    app.delete('/api/todo/:id', function(req, res) {
 
         if (!req.params.id) {
             res.send('not found');
