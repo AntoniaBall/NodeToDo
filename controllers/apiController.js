@@ -8,12 +8,12 @@ module.exports = function(app) { // just 1 entry point
 
     /**
      * @swagger
-     * /todos
-     * get:
-     *      description : my first section,
-     *      responses :
+     * /todos :
+     *  get:
+     *      description : my first topic
+     *      responses:
      *          '200':
-     *              description : a successfull response
+     *              description : "successfull!"
      */
     app.get('/api/home', function(req, res) {
         res.send('Home API Controller');

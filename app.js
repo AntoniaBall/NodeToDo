@@ -18,7 +18,7 @@ const SwaggerOptions = {
     },
     
     // Path to the API docs
-    apis: ['./apiController.js']
+    apis: ['./controllers/apiController.js']
   };
 
 const SwaggerDocs = swaggerJSDoc(SwaggerOptions);
