@@ -6,7 +6,7 @@ module.exports = function(app) {
         res.send('Home API');
     });
 
-    app.get('/api/nodeToDo/add', function(req,res){
+    app.post('/api/nodeToDo/add', function(req,res){
 
         var starterTodos = [
             {
@@ -32,4 +32,10 @@ module.exports = function(app) {
             res.send(results);
         });
     });
+
+    app.get('/api/nodeToDo/:uname', function(req, res) {
+        Todos.find({username:req.params.uname}, function(err, todos) {
+            res.send(todos);
+        });
+    })
 }
