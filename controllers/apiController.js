@@ -19,4 +19,44 @@ module.exports = function(app) { // just 1 entry point
                 res.send(todos);
             });
     });
+
+    app.post('/api/todo', function(req, res) {
+
+        if(req.body.id) {
+            Todos.findByIdAndUpdate({
+                    todo : req.body.todo,
+                    isDone : req.body.isDone,
+                    hasAttachment : req.body.hasAttachment
+            }, function(err, result) {
+                if (err) throw err;
+                res.send('success');
+            });
+        }
+
+        else {
+            var newTodo = Todos({
+                username: 'test',
+                todo : req.body.todo,
+                isDone: req.body.isDone,
+                hasAttachment : req.body.hasAttachment
+            });
+            newTodo.save(function(err) {
+                res.send('add success');
+            });
+        }
+    });
+
+    app.delete('/api/delete/:id', function(req, res) {
+
+        if (!req.params.id) {
+            res.send('not found');
+        }
+        else {
+            Todos.findByIdAndDelete(req.body.id, function(err) {
+                if (err) throw err;
+                res.send('object deleted')
+            });
+        }
+    });
+
 }
