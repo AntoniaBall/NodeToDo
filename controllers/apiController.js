@@ -1,10 +1,10 @@
-var Todos = require('../models/todoModel'); // .. je remonte d'un niveau
+var Todos = require('../models/todoModel'); // ..
 var bodyParser = require('body-parser');
 
-module.exports = function(app) { // just 1 entry point
+module.exports = function(app) { // 1 entry point
 
-/*     app.use(bodyParser.json()); // nous parserons le body en Json
- */    app.use(bodyParser.urlencoded({ extended:true})); // il faudra qu'on soit capable de lire l'URL
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended:true})); // URL read
 
     /**
      * @swagger
@@ -45,12 +45,10 @@ module.exports = function(app) { // just 1 entry point
      *              description : "not found pouet pouet"
      */
     app.get('/api/todos/:id', function(req, res) {
-        Todos.findById(req.params.id, function(err, todo) {   
+        Todos.findById(req.params.id, function(err, todo) {
             if (err) throw err;
             res.send(todo);
-/*             res.send(req.params.id);
- */        });
-        // :id
+      });
     });
 
     /**
@@ -85,7 +83,7 @@ module.exports = function(app) { // just 1 entry point
      *              description : "successfull!"
      */
     app.post('/api/todos', function(req, res) {
-/*         var newTodo = Todos({
+   /*      var newTodo = Todos({
             username: req.body.username,
             todo : req.body.todo,
             isDone: req.body.isDone,
@@ -134,13 +132,37 @@ module.exports = function(app) { // just 1 entry point
      *  put:
      *      summary : "update a todo by ID"
      *      tags : [ToDo]
-     * 
-     *      produces :
-     *         - application/json
      *      parameters: 
-     *         - username : username
-     *           description : id
+     *         - id : id
+     *           description : TodoId
      *           type : string
+     *           name : id
+     *           in : path
+     *           required : true
+     *         - in : body
+     *           required : true
+     *           name : todo
+     *           schema :
+     *              type : object
+     *              required:
+     *                 - username
+     *              properties:
+     *                 username:
+     *                   type : string
+     *                   example : update the username with this
+     *                   name : username
+     *                 todo:
+     *                   type : string
+     *                   name : todo
+     *                   example : update the todo with this
+     *                 isDone:
+     *                   type : boolean
+     *                   name : isDone
+     *                   example : true
+     *                 hasAttachment:
+     *                   type : boolean
+     *                   name : hasAttachment
+     *                   example : false
      *      responses:
      *          '200':
      *              description : "successfull!"
@@ -148,10 +170,15 @@ module.exports = function(app) { // just 1 entry point
      *              description : "not found pouet pouet"
      */
     app.put('/api/todos/:id', function(req,res) {
-
-        Todos.findByIdAndDelete(req.params.id, function(err) {
-                if (err) throw err;
-                res.send('object deleted !');
+/*         res.send(req.body.username); // ok
+ */
+         Todos.findByIdAndUpdate(req.params.id, {
+                username : req.body.username,
+                todo : req.body.todo,
+                isDone : req.body.isDone,
+                hasAttachment : req.body.hasAttachment
+            }, function(err, todo) {
+                res.send('object updated');
             });
     });
 }
