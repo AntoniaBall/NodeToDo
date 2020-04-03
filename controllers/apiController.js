@@ -26,7 +26,7 @@ module.exports = function(app) { // just 1 entry point
 
     /**
      * @swagger
-     * /api/todos/:id:
+     * /api/todos/{id}:
      *  get:
      *      summary : find a todo by Id
      *      parameters:
@@ -43,34 +43,40 @@ module.exports = function(app) { // just 1 entry point
      *              description : "not found pouet pouet"
      */
     app.get('/api/todos/:id', function(req, res) {
-        Todos.findById(req.params.id);
-        res.send(req.params.id); // :id
+        Todos.findById(req.params.id, function(err, todo) {   
+            if (err) throw err;
+            res.send(todo);
+/*             res.send(req.params.id);
+ */        });
+        // :id
     });
-  
-    app.get('/api/todo/:uname', function(req,res) {
-
-        Todos.find({ username : req.params.uname},
-            function(err, todos) {
-                if (err) throw err;
-
-                res.send(todos);
-            });
-    });
-
-    
 
     /**
      * @swagger
      * /api/todos:
      *  post:
      *      summary : "Add a to do"
+     *      parameters:
+     *         - in : body
+     *           required : true
+     *           name : todo
+     *           schema :
+     *             type : object
+     *             properties :
+     *              - username :
+     *                  type : string
+     *              - todo :
+     *                  type : string
+     *              - isDone :
+     *                  type : Boolean
+     *              - hasAttachment :
+     *                  type : Boolean
      *      responses:
      *          '200':
      *              description : "successfull!"
      */
     app.post('/api/todos', function(req, res) {
-
-        if(req.body.id) {
+ /*        if(req.body.id) {
             Todos.findByIdAndUpdate({
                     todo : req.body.todo,
                     isDone : req.body.isDone,
@@ -80,8 +86,7 @@ module.exports = function(app) { // just 1 entry point
                 res.send('success');
             });
         }
-
-        else {
+        else { */
             var newTodo = Todos({
                 username: 'test',
                 todo : req.body.todo,
@@ -89,9 +94,10 @@ module.exports = function(app) { // just 1 entry point
                 hasAttachment : req.body.hasAttachment
             });
             newTodo.save(function(err) {
+                if (err) throw err;
                 res.send('add success');
             });
-        }
+/*         } */
     });
 
     /**
