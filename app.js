@@ -12,7 +12,7 @@ const SwaggerOptions = {
     definition: {
       openapi: '3.0.0',
       info: {
-        title: 'My first API Node', // Title (required)
+        title: 'NodeToDo', // Title (required)
         version: '1.0.0', // Version (required)
       },
     },
@@ -22,6 +22,10 @@ const SwaggerOptions = {
   };
 
 const SwaggerDocs = swaggerJSDoc(SwaggerOptions);
+
+const swaggerUiAssetPath = require("swagger-ui-dist").getAbsoluteFSPath();
+
+app.use(express.static(swaggerUiAssetPath));
 
 var port = process.env.PORT || 3000;
 

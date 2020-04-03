@@ -8,34 +8,48 @@ module.exports = function(app) { // just 1 entry point
 
     /**
      * @swagger
-     * /todos:
+     * /api/todos:
      *  get:
-     *      description : "my first topic"
+     *      summary : get all todos
      *      responses:
      *          '200':
      *              description : "successfull!"
+     *          '404':
+     *              description : "not found pouet pouet"
      */
-    app.get('/api/home', function(req, res) {
-        res.send('Home API Controller');
+    app.get('/api/todos', function(req, res) {
+        Todos.find({}, function(err,todos) {
+            if(err) throw err;
+            res.send(todos);
+        });
     });
 
     /**
      * @swagger
-     * /api/todo/:uname:
+     * /api/todos/:id:
      *  get:
-     *      description : "find a todo by username"
+     *      summary : find a todo by Id
      *      parameters:
-     *         - username : username
-     *           description : username
-     *           required: true
+     *         - id : id
+     *           description : TodoId
      *           type : string
+     *           name : id
+     *           in : path
+     *           required : true
      *      responses:
      *          '200':
      *              description : "successfull!"
+     *          '404':
+     *              description : "not found pouet pouet"
      */
+    app.get('/api/todos/:id', function(req, res) {
+        Todos.findById(req.params.id);
+        res.send(req.params.id); // :id
+    });
+  
     app.get('/api/todo/:uname', function(req,res) {
 
-        Todos.findOne({ username : req.params.uname},
+        Todos.find({ username : req.params.uname},
             function(err, todos) {
                 if (err) throw err;
 
@@ -43,16 +57,18 @@ module.exports = function(app) { // just 1 entry point
             });
     });
 
+    
+
     /**
      * @swagger
-     * /api/todo:
+     * /api/todos:
      *  post:
-     *      description : "Add a to do"
+     *      summary : "Add a to do"
      *      responses:
      *          '200':
      *              description : "successfull!"
      */
-    app.post('/api/todo', function(req, res) {
+    app.post('/api/todos', function(req, res) {
 
         if(req.body.id) {
             Todos.findByIdAndUpdate({
@@ -80,14 +96,14 @@ module.exports = function(app) { // just 1 entry point
 
     /**
      * @swagger
-     * /api/todo/:id:
+     * /api/todos/:id:
      *  delete:
-     *      description : "delete todo by Id"
+     *      summary : "delete todo by Id"
      *      responses:
      *          '200':
      *              description : "successfull!"
      */
-    app.delete('/api/todo/:id', function(req, res) {
+    app.delete('/api/todos/:id', function(req, res) {
 
         if (!req.params.id) {
             res.send('not found');
@@ -95,8 +111,36 @@ module.exports = function(app) { // just 1 entry point
         else {
             Todos.findByIdAndDelete(req.body.id, function(err) {
                 if (err) throw err;
-                res.send('object deleted')
+                res.send('object deleted');
             });
         }
+    });
+
+    /**
+     * @swagger
+     * /api/todos/:id:
+     * 
+     *  put:
+     *      summary : "update a todo by ID"
+     *      produces :
+     *         - application/json
+     *      parameters: 
+     *         - username : username
+     *           description : username
+     *           type : string
+     *      responses:
+     *          '200':
+     *              description : "successfull!"
+     *          '404':
+     *              description : "not found pouet pouet"
+     */
+    app.put('/api/todos/:id', function(req,res) {
+
+        Todos.find({ _id : req.params.id},
+            function(err, todo) {
+                if (err) throw err;
+
+                res.send(todo);
+            });
     });
 }
